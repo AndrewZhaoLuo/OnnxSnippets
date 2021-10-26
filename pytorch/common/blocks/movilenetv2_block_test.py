@@ -8,7 +8,7 @@ from pytorch.common.blocks import mobilenetv2_block
 from torch import nn
 
 
-class TestMobilenetV1Block(unittest.TestCase):
+class TestMobilenetV2Block(unittest.TestCase):
     in_channels = [3, 6, 9]
 
     def get_generic_conditions(self):
@@ -30,5 +30,5 @@ class TestMobilenetV1Block(unittest.TestCase):
                             + [spatial_condition] * 2,
                         )
 
-    def test_mobilenetv1_block(self):
+    def test_mobilenetv2_block(self):
         self.helper(mobilenetv2_block.MobilenetV2Block)
