@@ -1,6 +1,7 @@
+from typing import *
+
 import torch
 from torch import nn
-from typing import *
 
 
 class _ConvBnActivation(nn.Module):
@@ -26,7 +27,6 @@ class _ConvBnActivation(nn.Module):
         groups: int = 1,
         activation: Optional[nn.Module] = None,
         bias: int = True,
-        dtype: int = None,
         do_conv_transpose: bool = False,
     ):
         super().__init__()
@@ -52,7 +52,6 @@ class _ConvBnActivation(nn.Module):
             dilation=dilation,
             groups=groups,
             bias=bias,
-            dtype=dtype,
         )
         if ndim not in self._ConstructorsBN:
             raise ValueError(
@@ -82,7 +81,6 @@ class Conv1DBnActivation(_ConvBnActivation):
         groups: int = 1,
         activation: Optional[nn.Module] = nn.ReLU(),
         bias: int = True,
-        dtype: int = None,
     ):
         super().__init__(
             ndim=1,
@@ -95,7 +93,6 @@ class Conv1DBnActivation(_ConvBnActivation):
             groups=groups,
             activation=activation,
             bias=bias,
-            dtype=dtype,
             do_conv_transpose=False,
         )
 
@@ -112,7 +109,6 @@ class Conv2DBnActivation(_ConvBnActivation):
         groups: int = 1,
         activation: Optional[nn.Module] = nn.ReLU(),
         bias: int = True,
-        dtype: int = None,
     ):
         super().__init__(
             ndim=2,
@@ -125,7 +121,6 @@ class Conv2DBnActivation(_ConvBnActivation):
             groups=groups,
             activation=activation,
             bias=bias,
-            dtype=dtype,
             do_conv_transpose=False,
         )
 
@@ -142,7 +137,6 @@ class Conv3DBnActivation(_ConvBnActivation):
         groups: int = 1,
         activation: Optional[nn.Module] = nn.ReLU(),
         bias: int = True,
-        dtype: int = None,
     ):
         super().__init__(
             ndim=3,
@@ -155,7 +149,6 @@ class Conv3DBnActivation(_ConvBnActivation):
             groups=groups,
             activation=activation,
             bias=bias,
-            dtype=dtype,
             do_conv_transpose=False,
         )
 
@@ -172,7 +165,6 @@ class Conv1DTransposeBnActivation(_ConvBnActivation):
         groups: int = 1,
         activation: Optional[nn.Module] = nn.ReLU(),
         bias: int = True,
-        dtype: int = None,
     ):
         super().__init__(
             ndim=1,
@@ -185,7 +177,6 @@ class Conv1DTransposeBnActivation(_ConvBnActivation):
             groups=groups,
             activation=activation,
             bias=bias,
-            dtype=dtype,
             do_conv_transpose=True,
         )
 
@@ -202,7 +193,6 @@ class Conv2DTransposeBnActivation(_ConvBnActivation):
         groups: int = 1,
         activation: Optional[nn.Module] = nn.ReLU(),
         bias: int = True,
-        dtype: int = None,
     ):
         super().__init__(
             ndim=2,
@@ -215,7 +205,6 @@ class Conv2DTransposeBnActivation(_ConvBnActivation):
             groups=groups,
             activation=activation,
             bias=bias,
-            dtype=dtype,
             do_conv_transpose=True,
         )
 
@@ -245,6 +234,5 @@ class Conv3DTransposeBnActivation(_ConvBnActivation):
             groups=groups,
             activation=activation,
             bias=bias,
-            dtype=dtype,
             do_conv_transpose=True,
         )
