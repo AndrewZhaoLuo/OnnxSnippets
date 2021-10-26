@@ -1,10 +1,10 @@
-from pytorch.common import conv_bn_activation
-from torch import nn
-import torch
-
-import unittest
 import itertools
 import random
+import unittest
+
+import torch
+from pytorch.common import common_test, conv_bn_activation
+from torch import nn
 
 
 class TestConvBNActivation(unittest.TestCase):
@@ -17,7 +17,6 @@ class TestConvBNActivation(unittest.TestCase):
     groups = [1, 3]
     activation = [nn.ReLU()]
     bias = [True]
-    dtypes = [torch.float32]
 
     def get_generic_conditions(self, max_sample_size=100):
         result = random.sample(
@@ -32,7 +31,6 @@ class TestConvBNActivation(unittest.TestCase):
                     self.groups,
                     self.activation,
                     self.bias,
-                    self.dtypes,
                 )
             ),
             max_sample_size,
@@ -49,33 +47,9 @@ class TestConvBNActivation(unittest.TestCase):
                 "groups": t[6],
                 "activation": t[7],
                 "bias": t[8],
-                "dtype": t[9],
             }
             for t in result
         ]
-
-    def verify_module(
-        self,
-        ndim: int,
-        in_channels: int,
-        out_channels: int,
-        module: nn.Module,
-        dtype: str,
-        spatial_dim: int = 12,
-    ):
-        # We assume the batch and channel dimension always come first
-        # Get spatial dimensions
-        size = [spatial_dim] * ndim
-
-        # Add batch (1) and channels
-        size = [1, in_channels] + size
-
-        input_tensor = torch.rand(size=size, dtype=dtype)
-
-        out_tensor = module(input_tensor)
-
-        self.assertEqual(out_tensor.shape[1], out_channels)
-        self.assertEqual(out_tensor.dtype, dtype)
 
     def helper(self, constructor, ndim):
         conditions = self.get_generic_conditions()
@@ -83,12 +57,8 @@ class TestConvBNActivation(unittest.TestCase):
             with self.subTest(**condition):
                 with torch.no_grad():
                     module = constructor(**condition)
-                    self.verify_module(
-                        ndim,
-                        condition["in_channels"],
-                        condition["out_channels"],
-                        module,
-                        condition["dtype"],
+                    common_test.verify_module(
+                        module, input_shape=[1, condition["in_channels"]] + [12] * ndim
                     )
 
     def test_conv1d_bn_relu(self):
