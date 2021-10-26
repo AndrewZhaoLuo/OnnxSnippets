@@ -35,7 +35,7 @@ class ExportLinear:
     def export_model(
         self, torch_model, ndim, features_in, spatial_dimensions, name, dir="export/"
     ):
-        dims = [spatial_dimensions] * ndim + [features_in]
+        dims = [1, spatial_dimensions] * ndim + [features_in]
 
         # Input to the model
         x = torch.randn(*dims, requires_grad=True)
