@@ -22,4 +22,4 @@ class MultiheadAttention(nn.Module):
         key = self.key_matrix(x)
         value = self.value_matrix(x)
 
-        return self.attn(query, key, value)
+        return self.attn(query, key, value, need_weights=False)
