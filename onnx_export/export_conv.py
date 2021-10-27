@@ -6,7 +6,7 @@ from onnx_export import common
 
 class ExportConvs:
     default_conditions = {
-        "spatial_dimension": 256,
+        "spatial_dimension": 128,
         "in_channels": 64,
         "out_channels": 64,
         "kernel_size": 3,
@@ -16,9 +16,8 @@ class ExportConvs:
     }
 
     sequential_conditions = {
-        "spatial_dimension": [64, 128, 256],
+        "spatial_dimension": [32, 64, 128],
         "in_channels": [4, 64, 128, 256],
-        "out_channels": [4, 64, 128, 256],
         "kernel_size": [1, 3, 5],
         "stride": [1, 2],
         "dilation": [1, 2],
@@ -32,6 +31,7 @@ class ExportConvs:
             for v in self.sequential_conditions[condition_name]:
                 new_condition = self.default_conditions.copy()
                 new_condition[condition_name] = v
+                new_condition["out_channels"] = new_condition["in_channels"]
                 conditions.add(tuple(new_condition.items()))
 
         return conditions

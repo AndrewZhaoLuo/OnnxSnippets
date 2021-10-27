@@ -6,16 +6,15 @@ from onnx_export import common
 
 class ExportMobilenetV1:
     default_conditions = {
-        "in_channels": 512,
-        "out_channels": 512,
-        "spatial_dimension": 256,
+        "in_channels": 64,
+        "out_channels": 64,
+        "spatial_dimension": 128,
         "stride": 1,
     }
 
     sequential_conditions = {
-        "in_channels": [128, 256, 512],
-        "out_channels": [128, 256, 512],
-        "spatial_dimension": [64, 128, 256],
+        "in_channels": [32, 64, 128],
+        "spatial_dimension": [32, 64, 128],
     }
 
     def get_all_conditions(self):
@@ -25,6 +24,8 @@ class ExportMobilenetV1:
             for v in self.sequential_conditions[condition_name]:
                 new_condition = self.default_conditions.copy()
                 new_condition[condition_name] = v
+                new_condition["out_channels"] = new_condition["in_channels"]
+
                 conditions.add(tuple(new_condition.items()))
 
         return conditions

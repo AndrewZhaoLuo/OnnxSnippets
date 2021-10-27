@@ -8,7 +8,7 @@ from pytorch.common.blocks import multihead_attention_block
 class ExportMultiheadAttention:
     default_conditions = {
         # tiny-bert analog
-        "features_size": 128,
+        "features_size": 256,
         "num_heads": 2,
         "seq_length": 64,
     }
