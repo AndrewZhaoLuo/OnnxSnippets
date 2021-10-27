@@ -8,14 +8,14 @@ class ExportMobilenetV1:
     default_conditions = {
         "in_channels": 512,
         "out_channels": 512,
-        "spatial_dimension": 512,
+        "spatial_dimension": 256,
         "stride": 1,
     }
 
     sequential_conditions = {
         "in_channels": [128, 256, 512],
         "out_channels": [128, 256, 512],
-        "spatial_dimension": [128, 256, 512],
+        "spatial_dimension": [64, 128, 256],
     }
 
     def get_all_conditions(self):

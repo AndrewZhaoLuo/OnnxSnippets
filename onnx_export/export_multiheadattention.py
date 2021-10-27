@@ -10,7 +10,7 @@ class ExportMultiheadAttention:
         # tiny-bert analog
         "features_size": 128,
         "num_heads": 2,
-        "seq_length": 32,
+        "seq_length": 64,
     }
 
     sequential_conditions = {

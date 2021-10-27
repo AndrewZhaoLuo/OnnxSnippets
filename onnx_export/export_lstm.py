@@ -9,7 +9,7 @@ class ExportLSTM:
         "input_size": 128,
         "hidden_size": 128,
         "num_layers": 1,
-        "seq_length": 50,
+        "seq_length": 64,
     }
 
     sequential_conditions = {

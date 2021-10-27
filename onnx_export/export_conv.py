@@ -6,7 +6,7 @@ from onnx_export import common
 
 class ExportConvs:
     default_conditions = {
-        "spatial_dimension": 512,
+        "spatial_dimension": 256,
         "in_channels": 64,
         "out_channels": 64,
         "kernel_size": 3,
@@ -16,7 +16,7 @@ class ExportConvs:
     }
 
     sequential_conditions = {
-        "spatial_dimension": [128, 256, 512, 1024],
+        "spatial_dimension": [64, 128, 256],
         "in_channels": [4, 64, 128, 256],
         "out_channels": [4, 64, 128, 256],
         "kernel_size": [1, 3, 5],

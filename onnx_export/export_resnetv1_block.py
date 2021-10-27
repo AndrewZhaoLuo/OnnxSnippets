@@ -7,12 +7,12 @@ from onnx_export import common
 class ExportResnetV1Block:
     default_conditions = {
         "in_channels": 128,
-        "spatial_dimension": 512,
+        "spatial_dimension": 256,
     }
 
     sequential_conditions = {
         "in_channels": [32, 64, 128],
-        "spatial_dimension": [128, 256, 512],
+        "spatial_dimension": [64, 128, 256],
     }
 
     def get_all_conditions(self):
