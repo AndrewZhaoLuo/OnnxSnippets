@@ -1,8 +1,4 @@
-import itertools
-from os import path
-
 import torch
-from pytorch.common import conv_bn_activation
 from torch import nn
 
 from onnx_export import common

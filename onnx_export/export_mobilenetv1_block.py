@@ -1,9 +1,5 @@
-import itertools
-from os import path
-
 import torch
 from pytorch.common.blocks import mobilenetv1_block
-from torch import nn
 
 from onnx_export import common
 
