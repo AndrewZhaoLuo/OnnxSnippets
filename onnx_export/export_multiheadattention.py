@@ -44,9 +44,8 @@ class ExportMultiheadAttention:
                 "input": {
                     0: "batch_size",
                     1: "sequence_length",
-                    2: "features_size",
                 },  # variable length axes
-                "output": {0: "batch_size", 1: "sequence_length", 2: "features_size"},
+                "output": {0: "batch_size", 1: "sequence_length"},
             },
         )
 
