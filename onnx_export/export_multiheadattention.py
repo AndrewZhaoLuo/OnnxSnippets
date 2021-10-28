@@ -1,8 +1,8 @@
 import torch
+from pytorch.common.blocks import multihead_attention_block
 from torch import nn
 
 from onnx_export import common
-from pytorch.common.blocks import multihead_attention_block
 
 
 class ExportMultiheadAttention:
@@ -34,7 +34,21 @@ class ExportMultiheadAttention:
 
         # Input to the model
         x = torch.rand(*dims)
-        common.export_model(torch_model, x, name, dir=dir, constant_fold=False)
+        common.export_model(
+            torch_model,
+            x,
+            name,
+            dir=dir,
+            constant_fold=False,
+            dynamic_axes={
+                "input": {
+                    0: "batch_size",
+                    1: "sequence_length",
+                    2: "features_size",
+                },  # variable length axes
+                "output": {0: "batch_size", 1: "sequence_length", 2: "features_size"},
+            },
+        )
 
     def export_multiheadattention(
         self,
@@ -44,7 +58,7 @@ class ExportMultiheadAttention:
         dir="./export",
     ):
         model = multihead_attention_block.MultiheadAttention(features_size, num_heads)
-        name = f"multihead_attention_ins={features_size}_seq={seq_length}_heads={num_heads}"
+        name = f"multihead_attention_ins={features_size}_heads={num_heads}"
 
         self.export_model(model, features_size, seq_length, name, dir=dir)
 
