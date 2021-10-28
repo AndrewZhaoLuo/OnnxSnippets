@@ -45,5 +45,5 @@ def export_model(
         input_names=input_names,  # the model's input names
         output_names=output_names,  # the model's output names
         dynamic_axes=dynamic_axes,  # variable name axis
-        training=TrainingMode.TRAINING,  # To prevent batch norm folding done by default
+        training=TrainingMode.EVAL,
     )

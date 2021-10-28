@@ -40,10 +40,11 @@ class ExportLSTM:
             name,
             dir=dir,
             output_names=["output", "hidden_state", "cell_state"],
+            # TODO: undo when TVM supports dynamic length sequence length
             dynamic_axes={
                 "input": {
                     0: "batch_size",
-                    1: "sequence_length",
+                    # 1: "sequence_length",
                 },  # variable length axes
                 "output": {0: "batch_size", 1: "sequence_length"},
                 "hidden_state": {
@@ -71,7 +72,7 @@ class ExportLSTM:
             batch_first=True,
         )
 
-        name = f"lstm_features={input_size}_hid={hidden_size}_layers={num_layers}"
+        name = f"lstm_features={input_size}_hid={hidden_size}_layers={num_layers}_seqlength={seq_length}"
 
         self.export_model(model, input_size, seq_length, name, dir=dir)
 
