@@ -8,7 +8,7 @@ class ExportConvs:
     default_conditions = {
         "spatial_dimension": 128,
         "in_channels": 64,
-        "out_channels": 64,
+        "out_channels": 128,
         "kernel_size": 3,
         "stride": 1,
         "dilation": 1,
@@ -30,7 +30,6 @@ class ExportConvs:
             for v in self.sequential_conditions[condition_name]:
                 new_condition = self.default_conditions.copy()
                 new_condition[condition_name] = v
-                new_condition["out_channels"] = new_condition["in_channels"]
                 conditions.add(tuple(new_condition.items()))
 
         return conditions
