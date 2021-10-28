@@ -14,7 +14,6 @@ class ExportLinear:
     sequential_conditions = {
         "in_features": [128, 256, 512],
         "out_features": [64, 128, 256],
-        "spatial_dimension": [128, 256, 512],
     }
 
     def get_all_conditions(self):
@@ -35,7 +34,19 @@ class ExportLinear:
 
         # Input to the model
         x = torch.randn(*dims, requires_grad=True)
-        common.export_model(torch_model, x, name, dir=dir)
+        common.export_model(
+            torch_model,
+            x,
+            name,
+            dir=dir,
+            dynamic_axes={
+                "input": {
+                    0: "batch_size",
+                    1: "spatial_dimension",
+                },  # variable length axes
+                "output": {0: "batch_size", 1: "spatial_dimension"},
+            },
+        )
 
     def export_dense(
         self,
@@ -46,9 +57,7 @@ class ExportLinear:
     ):
 
         model = nn.Linear(in_features, out_features)
-        name = (
-            f"linear_inf={in_features}_spatial={spatial_dimension}_outf={out_features}"
-        )
+        name = f"linear_inf={in_features}_outf={out_features}"
 
         self.export_model(model, 1, in_features, spatial_dimension, name, dir=dir)
 

@@ -16,7 +16,6 @@ class ExportConvs:
     }
 
     sequential_conditions = {
-        "spatial_dimension": [32, 64, 128],
         "in_channels": [4, 64, 128, 256],
         "kernel_size": [1, 3, 5],
         "stride": [1, 2],
@@ -39,11 +38,46 @@ class ExportConvs:
     def export_model(
         self, torch_model, ndim, channels_in, spatial_dimensions, name, dir="export/"
     ):
+
         dims = [1, channels_in] + [spatial_dimensions] * ndim
+
+        if ndim == 1:
+            dynamic_axes = {
+                "input": {
+                    0: "batch_size",
+                    2: "length_in",
+                },  # variable length axes
+                "output": {0: "batch_size", 2: "length_out"},
+            }
+        elif ndim == 2:
+            dynamic_axes = {
+                "input": {
+                    0: "batch_size",
+                    2: "height_in",
+                    3: "width_in",
+                },  # variable length axes
+                "output": {0: "batch_size", 2: "height_out", 3: "width_out"},
+            }
+        else:
+            # ndim == 3
+            dynamic_axes = {
+                "input": {
+                    0: "batch_size",
+                    2: "depth_in",
+                    3: "height_in",
+                    4: "width_in",
+                },  # variable length axes
+                "output": {
+                    0: "batch_size",
+                    2: "depth_out",
+                    3: "height_out",
+                    4: "width_out",
+                },
+            }
 
         # Input to the model
         x = torch.randn(*dims, requires_grad=True)
-        common.export_model(torch_model, x, name, dir=dir)
+        common.export_model(torch_model, x, name, dir=dir, dynamic_axes=dynamic_axes)
 
     def export_conv1d_models(
         self,
@@ -66,7 +100,7 @@ class ExportConvs:
             groups=groups,
         )
         name = (
-            f"full_conv1d_inc={in_channels}_spatial={spatial_dimension}_outc={out_channels}"
+            f"full_conv1d_inc={in_channels}_outc={out_channels}"
             f"_ksize={kernel_size}_stride={stride}_dilation={dilation}_groups={groups}"
         )
 
@@ -93,7 +127,7 @@ class ExportConvs:
             groups=groups,
         )
         name = (
-            f"full_conv2d_inc={in_channels}_spatial={spatial_dimension}_outc={out_channels}"
+            f"full_conv2d_inc={in_channels}_outc={out_channels}"
             f"_ksize={kernel_size}_stride={stride}_dilation={dilation}_groups={groups}"
         )
 
@@ -120,7 +154,7 @@ class ExportConvs:
             groups=groups,
         )
         name = (
-            f"full_conv3d_inc={in_channels}_spatial={spatial_dimension}_outc={out_channels}"
+            f"full_conv3d_inc={in_channels}_outc={out_channels}"
             f"_ksize={kernel_size}_stride={stride}_dilation={dilation}_groups={groups}"
         )
 

@@ -8,7 +8,19 @@ import torch.onnx
 TrainingMode = _C._onnx.TrainingMode
 
 
-def export_model(torch_model, x, name, dir="export/", constant_fold=True):
+def export_model(
+    torch_model,
+    x,
+    name,
+    dir="export/",
+    constant_fold=True,
+    input_names=["input"],
+    output_names=["output"],
+    dynamic_axes={
+        "input": {0: "batch_size"},  # variable length axes
+        "output": {0: "batch_size"},
+    },
+):
 
     if torch.cuda.is_available():
         cuda_device = torch.device("cuda")
@@ -30,11 +42,8 @@ def export_model(torch_model, x, name, dir="export/", constant_fold=True):
         export_params=True,  # store the trained parameter weights inside the model file
         opset_version=12,  # the ONNX version to export the model to
         do_constant_folding=constant_fold,  # whether to execute constant folding for optimization
-        input_names=["input"],  # the model's input names
-        output_names=["output"],  # the model's output names
-        dynamic_axes={
-            "input": {0: "batch_size"},  # variable length axes
-            "output": {0: "batch_size"},
-        },
-        training=TrainingMode.TRAINING,
+        input_names=input_names,  # the model's input names
+        output_names=output_names,  # the model's output names
+        dynamic_axes=dynamic_axes,  # variable name axis
+        training=TrainingMode.TRAINING,  # To prevent batch norm folding done by default
     )

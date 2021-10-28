@@ -34,7 +34,26 @@ class ExportLSTM:
 
         # Input to the model
         x = torch.randn(*dims, requires_grad=True)
-        common.export_model(torch_model, x, name, dir=dir)
+        common.export_model(
+            torch_model,
+            x,
+            name,
+            dir=dir,
+            output_names=["output", "hidden_state", "cell_state"],
+            dynamic_axes={
+                "input": {
+                    0: "batch_size",
+                    1: "sequence_length",
+                },  # variable length axes
+                "output": {0: "batch_size", 1: "sequence_length"},
+                "hidden_state": {
+                    1: "batch_size",
+                },
+                "cell_state": {
+                    1: "batch_size",
+                },
+            },
+        )
 
     def export_lstm(
         self,
@@ -52,7 +71,7 @@ class ExportLSTM:
             batch_first=True,
         )
 
-        name = f"lstm_ins={input_size}_seq={seq_length}_hid={hidden_size}_layers={num_layers}"
+        name = f"lstm_features={input_size}_hid={hidden_size}_layers={num_layers}"
 
         self.export_model(model, input_size, seq_length, name, dir=dir)
 
